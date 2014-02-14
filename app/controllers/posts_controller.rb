@@ -4,7 +4,7 @@ class PostsController < ApplicationController
   before_filter :authenticate_user!
 
   def index
-    @posts = Post.all.ordered
+    @posts = current_user.posts.ordered
   end
 
   def show
