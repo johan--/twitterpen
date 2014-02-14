@@ -12,7 +12,8 @@ Twitterpen::Application.configure do
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
-
+  ENV["TWITTER_TOKEN"] = "M6kE4EziepNo0Qesby8jbA" 
+  ENV["TWITTER_SECRET"] ="lWKjKcw77qeqRuDq0OJIvrXZD6MeakC8IxFvOkQisE"
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 
