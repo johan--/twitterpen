@@ -1,0 +1,5 @@
+class AddnameToUsers < ActiveRecord::Migration
+  def change
+  dd_column :users, :name, :string
+  end
+end
