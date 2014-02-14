@@ -24,7 +24,6 @@ end
 
 group :test, :development do 
   gem 'sqlite3'
-  gem 'devise'
   gem 'omniauth-twitter'
 end
 
