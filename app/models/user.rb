@@ -3,12 +3,13 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,:omniauthable
-         
- 
- ##instance methods
- 
- def self.find_for_twitter_oauth(auth, signed_in_resource=nil)
- 
+
+  has_many :posts
+
+  ##instance methods
+
+  def self.find_for_twitter_oauth(auth, signed_in_resource=nil)
+
   user = User.where(:provider => auth.provider, :uid => auth.uid).first
   if user
     return user
