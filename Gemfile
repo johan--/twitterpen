@@ -12,7 +12,6 @@ gem 'jbuilder', '~> 1.2'
 gem 'devise'
 gem 'omniauth-twitter'
 gem 'simple_form'
->>>>>>> Move require out into Gemfile
 
 group :production do
   gem 'pg'
