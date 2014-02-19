@@ -1,0 +1,19 @@
+= simple_form_for(@post) do |f|
+  - if @post.errors.any?
+    .errors
+      = f.error_notification
+      ul
+        - @post.errors.full_messages.each do |msg|
+          li
+            = msg
+  .form-inputs
+    .field
+      = f.label :title
+      br
+      = f.text_field :title
+    .field
+      = f.label :body
+      br
+      = f.text_area :body
+  .form-actions
+    = f.button :submit

@@ -12,6 +12,7 @@ gem 'jbuilder', '~> 1.2'
 gem 'devise'
 gem 'omniauth-twitter'
 gem 'simple_form'
+gem 'slim'
 
 group :production do
   gem 'pg'
@@ -22,7 +23,7 @@ group :doc do
   gem 'sdoc', require: false
 end
 
-group :test, :development do 
+group :test, :development do
   gem 'sqlite3'
 end
 
