@@ -13,6 +13,7 @@ gem 'devise'
 gem 'omniauth-twitter'
 gem 'simple_form'
 gem 'slim'
+gem 'rolify'
 
 group :production do
   gem 'pg'
