@@ -1,0 +1,21 @@
+doctype
+html
+  head
+    title
+      | Twitterpen
+    = stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true
+    = javascript_include_tag "application", "data-turbolinks-track" => true
+    = csrf_meta_tags
+  body
+    p#notice = notice
+    p#alert = alert
+
+    - if user_signed_in?
+      h4
+        | You are logged in as&nbsp;
+        = current_user.name
+        |  (#{current_user.roles.first.name})
+
+      = link_to 'Sign out', destroy_user_session_path, method: :delete
+
+    = yield
