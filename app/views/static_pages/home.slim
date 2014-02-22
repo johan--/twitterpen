@@ -1,0 +1,10 @@
+.static-pages.static-pages-home
+  .row
+    .col-md-6.col-md-offset-3
+      .jumbotron.text-center
+        h2 Sign up with Twitter
+
+        = link_to user_omniauth_authorize_path('twitter', role: 'publisher', origin: publisher_intro_path ), class: 'btn btn-lg btn-primary' do
+          i.fa.fa-twitter.fa-lg
+          |  Sign Up using Twitter
+

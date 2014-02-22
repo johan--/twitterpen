@@ -1,27 +1,36 @@
-h1
-  | Listing posts
-table
-  thead
-    tr
-      th
-        | Title
-      th
-        | Body
-      th
-      th
-      th
-  tbody
-    - @posts.each do |post|
-      tr
-        td
-          = post.title
-        td
-          = post.body
-        td
-          = link_to 'Show', post
-        td
-          = link_to 'Edit', edit_post_path(post)
-        td
-          = link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' }
-br
-= link_to 'New Post', new_post_path
+.posts-page
+  .publisher-posts
+    .row
+      .col-md-12
+        .page-header
+          h3
+            | My submissions
+            = link_to new_post_path, class: 'btn btn-success pull-right' do
+              i.fa.fa-plus
+              |  Submit New
+
+    .row
+      .col-md-12
+        table.table.table-hover
+          thead
+            tr
+              th.col-md-6 Title
+              th Submitted
+              th Last Edit
+              th Editor
+              th Status
+          tbody
+            - @posts.each do |post|
+              tr
+                td = link_to post.title, post
+                td = post.created_at.strftime("%m/%d/%Y")
+                td = post.updated_at.strftime("%m/%d/%Y")
+                td John Doe
+                td.status
+                  span.label.label-success Edited
+
+    .row
+      .col-md-12
+        = link_to new_post_path, class: 'btn btn-success pull-right' do
+          i.fa.fa-plus
+          |  Submit New

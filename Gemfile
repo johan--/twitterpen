@@ -1,8 +1,8 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
+source 'https://rails-assets.org'
 
 gem 'rails', '4.0.2'
 gem 'sass-rails', '~> 4.0.0'
-gem 'bootstrap-sass', '3.0.3.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'therubyracer', platforms: :ruby
@@ -26,6 +26,7 @@ end
 
 group :test, :development do
   gem 'sqlite3'
+  gem 'pg'
 end
 
 # Use ActiveModel has_secure_password
@@ -33,3 +34,7 @@ end
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
+
+# Rails Assets https://rails-assets.org
+gem 'rails-assets-bootstrap'
+gem 'rails-assets-components-font-awesome'

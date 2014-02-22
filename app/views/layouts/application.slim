@@ -1,21 +1,39 @@
 doctype
 html
   head
-    title
-      | Twitterpen
+    meta charset="utf-8"
+    meta http-equiv="X-UA-Compatible" content="IE=edge"
+    meta name="viewport" content="width=device-width, initial-scale=1"
+
+    title Twitterpen
+
     = stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true
     = javascript_include_tag "application", "data-turbolinks-track" => true
     = csrf_meta_tags
+
+    / HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries
+    / WARNING: Respond.js doesn't work if you view the page via file://
+    /[if lt IE 9]
+      script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"
+      script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"
+
   body
-    p#notice = notice
-    p#alert = alert
+    .container
 
-    - if user_signed_in?
-      h4
-        | You are logged in as&nbsp;
-        = current_user.name
-        |  (#{current_user.roles.first.name})
+      .header
+        .logo
+          img src="http://placehold.it/220x80&text=Twitterpen" alt="Twitterpen"
 
-      = link_to 'Sign out', destroy_user_session_path, method: :delete
+      = render 'shared/navbar'
 
-    = yield
+      - if notice
+        .alert.alert-success.alert-dismissable
+          button.close type="button" data-dismiss="alert" &times;
+          = notice
+
+      - if alert
+        .alert.alert-warning.alert-dismissable
+          button.close type="button" data-dismiss="alert" &times;
+          = alert
+
+      = yield

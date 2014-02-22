@@ -1,0 +1,22 @@
+/ Static navbar
+.navbar.navbar-default
+  .container-fluid
+    .navbar-header
+      / a.navbar-brand href="#" Twitterpen
+
+    .navbar-collapse.collapse
+      ul.nav.navbar-nav
+        li
+          = link_to 'Home', root_path
+
+      - if user_signed_in?
+
+        ul.nav.navbar-nav.navbar-right
+          li.navbar-text
+            | Welcome #{current_user.name}
+          li
+            a href="#" My Settings
+          li
+            a href="#" My Submissions
+          li
+            = link_to 'Sign out', destroy_user_session_path, method: :delete
