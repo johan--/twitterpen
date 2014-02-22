@@ -1,0 +1,43 @@
+body {
+  padding-top: 20px;
+  padding-bottom: 20px;
+} // .body
+
+.header {
+  margin-bottom: 20px;
+} // .header
+
+.static-pages {
+
+  &.static-pages-home {
+    margin-top: 50px;
+
+    .btn-primary {
+      margin-top: 20px;
+    }
+  } // .static-pages-home
+
+
+  &.static-pages-publisher-intro {
+    .steps-wrapper {
+      margin: 20px 0px;
+    }
+  } // .static-pages-publisher-intro
+
+} // .static-pages
+
+.posts-page {
+
+  .post-form {
+    .btn-success {
+      margin-right: 20px;
+    }
+  } // .post-form
+
+  .publisher-posts {
+    td.status {
+      vertical-align: middle !important;
+    }
+  } // .publisher-posts
+
+} // .posts-page

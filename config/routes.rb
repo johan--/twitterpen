@@ -58,5 +58,7 @@ Twitterpen::Application.routes.draw do
 
   resources :posts
 
-  root "posts#index"
+  get 'publisher/intro' => 'static_pages#publisher_intro'
+
+  root 'static_pages#home'
 end
