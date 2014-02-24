@@ -1,0 +1,52 @@
+.payment-form-container
+  .row
+    .col-md-10.col-md-offset-1
+      .panel.panel-default
+        .panel-heading
+          h3.panel-title Please place your payment of $29 for this post to be edited.
+        .panel-body
+          form.form-horizontal#payment-form action="#{post_payments_path}" method="POST" autocomplete="off"
+            input type="hidden" name="#{request_forgery_protection_token.to_s}" value="#{form_authenticity_token}"
+            input#post-id type="hidden" name="post_payment[post_id]"
+            input#stripe-token type="hidden" name="post_payment[stripe_token]"
+            input#cc-exp-month type="hidden" data-stripe="exp-month"
+            input#cc-exp-year type="hidden" data-stripe="exp-year"
+
+            .row
+              .col-md-11.col-md-offset-1
+                .form-group
+                  .col-md-4.col-md-offset-2
+                    label.radio-inline
+                      input type="radio" name="payment-method" value="cc" Credit Card
+
+                    label.radio-inline
+                      input type="radio" name="payment-method" value="paypal" PayPal
+
+                .form-group
+                  label.control-label.col-md-2 for="cc-name" Name on Card
+                  .col-md-4
+                    input.form-control#cc-name type="text" placeholder="Name on Card" required="required" data-stripe="name"
+
+                  label.control-label.col-md-1 for="cc-email" Email
+                  .col-md-3
+                    input.form-control#email type="text" name="post_payment[email]" placeholder="Email" required="required"
+
+                .form-group
+                  label.control-label.col-md-2 for="cc-number" Card Details
+                  .col-md-4
+                    input.form-control#cc-number type="text" placeholder="Card number" required="required" data-stripe="number"
+
+                  .col-md-2
+                    input.form-control#cc-exp type="text" placeholder="MM/YY" maxlength="9" required="required"
+
+                  .col-md-2
+                    input.form-control#cc-cvc type="text" placeholder="CVC" maxlength="4" required="required" data-stripe="cvc"
+
+                .form-actions.text-center
+                  button.btn.btn-primary type="submit" Make Payment
+
+            .row
+              .col-md-12
+                .alert-container
+
+= render 'shared/stripe'

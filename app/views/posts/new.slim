@@ -1,7 +1,16 @@
 .posts-page
-    .row
-      .col-md-10.col-md-offset-1
-        .page-header
-          h3 Create Your Post
+  .row
+    .col-md-10.col-md-offset-1
+      .page-header
+        h3 Create Your Post
 
-        = render 'form'
+      = render 'form'
+
+  .row
+    .col-md-10.col-md-offset-1
+      p.text-center
+        | Your subscription plan is Basic. Change your payment method&nbsp;
+        a href="#" here.
+        |  When submitted you will be charged $0.99 for proofreading this post.
+
+  / = render 'posts/partials/payment_form'

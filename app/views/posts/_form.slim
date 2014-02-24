@@ -1,4 +1,6 @@
 = simple_form_for @post, html: { class: 'form post-form' } do |f|
+  = f.input :id, as: 'hidden', input_html: { value: @post.id }
+
   - if @post.errors.any?
     .alert.alert-danger
       p
