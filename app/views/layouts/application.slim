@@ -29,11 +29,11 @@ html
       - if notice
         .alert.alert-success.alert-dismissable
           button.close type="button" data-dismiss="alert" &times;
-          = notice
+          == notice
 
       - if alert
         .alert.alert-warning.alert-dismissable
           button.close type="button" data-dismiss="alert" &times;
-          = alert
+          == alert
 
       = yield

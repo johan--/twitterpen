@@ -19,14 +19,15 @@ ActiveRecord::Schema.define(version: 20140223182648) do
   create_table "post_payments", force: true do |t|
     t.integer  "post_id"
     t.integer  "user_id"
+    t.integer  "product_id"
     t.string   "email"
     t.integer  "amount"
     t.string   "currency"
-    t.string   "status"
+    t.integer  "status"
     t.string   "stripe_token"
-    t.string   "stripe_err_type"
     t.string   "stripe_err_message"
     t.string   "stripe_err_code"
+    t.text     "stripe_response"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -47,8 +48,8 @@ ActiveRecord::Schema.define(version: 20140223182648) do
     t.datetime "updated_at"
   end
 
-  add_index "roles", ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
-  add_index "roles", ["name"], name: "index_roles_on_name"
+  add_index "roles", ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id", using: :btree
+  add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false
@@ -68,14 +69,14 @@ ActiveRecord::Schema.define(version: 20140223182648) do
     t.string   "name"
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   create_table "users_roles", id: false, force: true do |t|
     t.integer "user_id"
     t.integer "role_id"
   end
 
-  add_index "users_roles", ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id"
+  add_index "users_roles", ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id", using: :btree
 
 end

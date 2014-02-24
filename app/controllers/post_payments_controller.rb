@@ -3,44 +3,48 @@ class PostPaymentsController < ApplicationController
   before_filter :authenticate_user!
 
   def create
-    redirect_to edit_post_path(post_payment_params[:post_id]) and return
-
-    amount = 50 # amount in cents
-    currency = 'usd'
+    product = $payments[:product][:post_edit]
 
     Stripe.api_key = ENV['STRIPE_API_KEY']
 
-    # Get the credit card details submitted by the form
     token = post_payment_params[:stripe_token]
+    email = post_payment_params[:email]
+    post_id = post_payment_params[:post_id]
 
     # Create the charge on Stripe's servers - this will charge the user's card
     begin
       charge = Stripe::Charge.create(
-        amount: amount,
-        currency: currency,
+        amount: product[:price],
+        currency: $payments[:currency],
         card: token,
-        description: post_payment_params[:email]
+        description: email
       )
     rescue Stripe::CardError => e
       logger.debug e
     end
 
-    # @post_payment = current_user.posts.find(post_payment_params[:post_id]).post_payment.new do |p|
-    #   p.email = post_payment_params[:email]
-    #   p.amount = amount
-    #   p.currency = currency
-    #   p.stripe_token = token
-    # end
+    @post_payment = current_user.posts.find(post_id).post_payments.build(
+      user_id: current_user.id,
+      product_id: product[:id],
+      email: email,
+      amount: product[:price],
+      currency: $payments[:currency],
+      status: (charge.paid == true ? $payments[:status][:paid] : $payments[:status][:not_paid]),
+      stripe_token: token,
+      stripe_err_message: charge.failure_message,
+      stripe_err_code: charge.failure_code,
+      stripe_response: charge.to_json,
+    )
 
-    # respond_to do |format|
-    #   if @post.save
-    #     format.json { render json: @post_payment, status: :created, location: @post_payment }
-    #     format.html { redirect_to posts_path }
-    #   else
-    #     format.json { render json: @post_payment.errors, status: :unprocessable_entity }
-    #     format.html { redirect_to edit_post_path(post_payment_params[:post_id])}
-    #   end
-    # end
+    respond_to do |format|
+      if @post_payment.save
+        format.json { render json: @post_payment, status: :created, location: @post_payment  }
+        format.html { redirect_to posts_path, notice: 'Success! Your post has been successfully submitted and an Editor will be assigned as soon as possible.' }
+      else
+        format.json { render json: @post_payment.errors, status: :unprocessable_entity }
+        format.html { redirect_to edit_post_path(post_payment_params[:post_id]), alert: 'Something went wrong with your payment. Please get send us a message at <a href="mailto:support@twitter">support@twitterpen</a>' }
+      end
+    end
   end
 
   private

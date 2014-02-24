@@ -7,4 +7,5 @@ class Post < ActiveRecord::Base
 
   scope :ordered, lambda { order('created_at ASC') }
   scope :recently_updated, lambda { order('updated_at DESC') }
+  scope :for_user, lambda { |user| where(user_id: user.id) }
 end
