@@ -57,6 +57,7 @@ Twitterpen::Application.routes.draw do
   #   end
 
   resources :posts
+  resources :post_payments, only: [:create]
 
   get 'publisher/intro' => 'static_pages#publisher_intro'
 

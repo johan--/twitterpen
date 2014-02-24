@@ -16,9 +16,11 @@ gem 'slim'
 gem 'rolify'
 
 group :production do
-  gem 'pg'
   gem 'rails_12factor'
 end
+
+gem 'pg'
+gem 'stripe', git: 'https://github.com/stripe/stripe-ruby'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
@@ -27,7 +29,7 @@ end
 
 group :test, :development do
   gem 'sqlite3'
-  gem 'pg'
+  gem 'dotenv-rails'
 end
 
 # Use ActiveModel has_secure_password
@@ -39,3 +41,5 @@ end
 # Rails Assets https://rails-assets.org
 gem 'rails-assets-bootstrap'
 gem 'rails-assets-components-font-awesome'
+gem 'rails-assets-jquery.payment'
+gem 'rails-assets-purl'

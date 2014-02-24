@@ -11,7 +11,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140220190530) do
+ActiveRecord::Schema.define(version: 20140223182648) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "post_payments", force: true do |t|
+    t.integer  "post_id"
+    t.integer  "user_id"
+    t.string   "email"
+    t.integer  "amount"
+    t.string   "currency"
+    t.string   "status"
+    t.string   "stripe_token"
+    t.string   "stripe_err_type"
+    t.string   "stripe_err_message"
+    t.string   "stripe_err_code"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "posts", force: true do |t|
     t.string   "title"

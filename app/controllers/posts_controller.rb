@@ -21,7 +21,7 @@ class PostsController < ApplicationController
     @post = current_user.posts.build(post_params)
 
     if @post.save
-      redirect_to posts_path, notice: 'Post was successfully created.'
+      redirect_to edit_post_path(@post, anchor: 'payment-form'), notice: 'Post was successfully created.'
     else
       render action: 'new'
     end
@@ -29,7 +29,7 @@ class PostsController < ApplicationController
 
   def update
     if @post.update(post_params)
-      redirect_to @post, notice: 'Post was successfully updated.'
+      redirect_to edit_post_path(@post, anchor: 'payment-form'), notice: 'Post was successfully updated.'
     else
       render action: 'edit'
     end

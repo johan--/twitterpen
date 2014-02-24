@@ -14,3 +14,7 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require bootstrap
+//= require jquery.payment/jquery.payment
+//= require purl
+//= require helper
+//= require main

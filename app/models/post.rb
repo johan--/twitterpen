@@ -1,6 +1,8 @@
 class Post < ActiveRecord::Base
   belongs_to :user
 
+  has_many :post_payments
+
   validates_presence_of :user, :title, :body
 
   scope :ordered, lambda { order('created_at ASC') }
