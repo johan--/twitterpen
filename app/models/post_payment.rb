@@ -1,4 +1,4 @@
-class PostPayments < ActiveRecord::Base
+class PostPayment < ActiveRecord::Base
   belongs_to :user
   belongs_to :post
 

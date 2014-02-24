@@ -3,7 +3,7 @@
     .col-md-10.col-md-offset-1
       .panel.panel-default
         .panel-heading
-          h3.panel-title Please place your payment of $29 for this post to be edited.
+          h3.panel-title Please place your payment of #{$payments[:product][:post_edit][:price_str]} for this post to be edited.
         .panel-body
           form.form-horizontal#payment-form action="#{post_payments_path}" method="POST" autocomplete="off"
             input type="hidden" name="#{request_forgery_protection_token.to_s}" value="#{form_authenticity_token}"
