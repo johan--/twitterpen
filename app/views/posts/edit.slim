@@ -11,6 +11,7 @@
       p.text-center
         | Your subscription plan is Basic. Change your payment method&nbsp;
         a href="#" here.
-        |  When submitted you will be charged $0.99 for proofreading this post.
+        |  When submitted you will be charged #{$payments[:product][:post_proofread][:price_str]} for proofreading this post.
 
-  = render 'posts/partials/payment_form'
+  - if @post.state_machine.allowed_transitions.include?('paid')
+    = render 'posts/partials/payment_form'

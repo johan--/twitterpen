@@ -4,7 +4,13 @@ class PostsController < ApplicationController
   before_filter :authenticate_user!
 
   def index
-    @posts = current_user.posts.ordered
+    if current_user.is_publisher?
+      @posts = current_user.posts.ordered
+      render 'index_publisher'
+    else
+      @posts = Post.joins(:post_transitions).where('post_transitions.to_state = ?', 'paid').ordered
+      render 'index_editor'
+    end
   end
 
   def show

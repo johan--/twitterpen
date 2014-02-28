@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140223182648) do
+ActiveRecord::Schema.define(version: 20140227200924) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,16 @@ ActiveRecord::Schema.define(version: 20140223182648) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "post_transitions", force: true do |t|
+    t.string  "to_state"
+    t.text    "metadata", default: "{}"
+    t.integer "sort_key"
+    t.integer "post_id"
+  end
+
+  add_index "post_transitions", ["post_id"], name: "index_post_transitions_on_post_id", using: :btree
+  add_index "post_transitions", ["sort_key", "post_id"], name: "index_post_transitions_on_sort_key_and_post_id", unique: true, using: :btree
 
   create_table "posts", force: true do |t|
     t.string   "title"

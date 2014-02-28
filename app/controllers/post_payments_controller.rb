@@ -23,7 +23,8 @@ class PostPaymentsController < ApplicationController
       logger.debug e
     end
 
-    @post_payment = current_user.posts.find(post_id).post_payments.build(
+    post = current_user.posts.find(post_id)
+    @post_payment = post.post_payments.build(
       user_id: current_user.id,
       product_id: product[:id],
       email: email,
@@ -36,8 +37,12 @@ class PostPaymentsController < ApplicationController
       stripe_response: charge.to_json,
     )
 
+    if @post_payment.save
+      post.state_machine.transition_to(:paid)
+    end
+
     respond_to do |format|
-      if @post_payment.save
+      if @post_payment.persisted?
         format.json { render json: @post_payment, status: :created, location: @post_payment  }
         format.html { redirect_to posts_path, notice: 'Success! Your post has been successfully submitted and an Editor will be assigned as soon as possible.' }
       else

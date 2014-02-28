@@ -9,18 +9,18 @@ gem 'therubyracer', platforms: :ruby
 gem 'jquery-rails'
 gem 'turbolinks'
 gem 'jbuilder', '~> 1.2'
+gem 'pg'
 gem 'devise'
 gem 'omniauth-twitter'
 gem 'simple_form'
 gem 'slim'
 gem 'rolify'
+gem 'stripe', git: 'https://github.com/stripe/stripe-ruby'
+gem 'statesman'
 
 group :production do
   gem 'rails_12factor'
 end
-
-gem 'pg'
-gem 'stripe', git: 'https://github.com/stripe/stripe-ruby'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
