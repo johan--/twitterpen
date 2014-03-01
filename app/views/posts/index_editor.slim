@@ -4,33 +4,20 @@
       .col-md-12
         .page-header
           h3
-            | Saved Draft Posts
+            | Pending Posts
     .row
       .col-md-12
         table.table.table-hover
           thead
             tr
-              th.col-md-6 Title
-              th Saved
-              th Last Edit
+              th.col-md-5 Title
+              th.col-md-5
+              th.col-md-2 Submitted
+              th
           tbody
             - @posts.each do |post|
-              - state = post.state_machine.current_state
-
               tr
-                - if state == 'pending' || state == 'paid'
-                  td = link_to post.title, edit_post_path(post)
-                - else
-                  td = link_to post.title
-
-                td = post.created_at.strftime("%m/%d/%Y")
-                td = post.updated_at.strftime("%m/%d/%Y")
-
-                td
-                  = link_to do
-                    i.fa.fa-pencil-square-o
-                    |  Edit
-                td
-                  = link_to do
-                    | Submit
-
+                td = link_to truncate(post.title, length: 55, separator: ' '), post_path(post)
+                td = truncate(post.body, length: 55, separator: ' ')
+                td = timeago(post.created_at)
+                td = link_to "Read".html_safe, post_path(post)

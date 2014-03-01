@@ -16,5 +16,6 @@
 //= require bootstrap
 //= require jquery.payment/jquery.payment
 //= require purl
+//= require jquery-timeago
 //= require helper
 //= require main

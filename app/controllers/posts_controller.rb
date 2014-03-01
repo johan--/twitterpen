@@ -2,6 +2,7 @@ class PostsController < ApplicationController
   before_action :set_post, only: [:edit, :update, :destroy]
 
   before_filter :authenticate_user!
+  before_filter :set_section
 
   def index
     if current_user.is_publisher?
@@ -48,6 +49,26 @@ class PostsController < ApplicationController
     redirect_to posts_path
   end
 
+  def assign_post
+    unless current_user.is_editor?
+      redirect_to posts_path, alert: 'Sorry, you need to be an editor to do this.' and return
+    end
+
+    post = Post.find(params[:id])
+    if post.editor_id?
+      redirect_to posts_path, alert: 'Sorry, this post has already been assigned.' and return
+    else
+      post.editor_id = current_user.id
+      post.editor_assigned_at = Time.now
+      if post.save
+        post.state_machine.transition_to(:assigned)
+        redirect_to posts_path, notice: 'Great, you can now edit the post.' and return
+      else
+        redirect_to posts and return
+      end
+    end
+  end
+
   private
     def set_post
       @post = Post.for_user(current_user).find(params[:id])
@@ -55,5 +76,10 @@ class PostsController < ApplicationController
 
     def post_params
       params.require(:post).permit(:title, :body)
+    end
+
+  protected
+    def set_section
+      @section = 'posts'
     end
 end

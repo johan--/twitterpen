@@ -60,6 +60,7 @@ Twitterpen::Application.routes.draw do
   resources :post_payments, only: [:create]
 
   get 'publisher/intro' => 'static_pages#publisher_intro'
+  get '/posts/:id/assign' => 'posts#assign_post', as: 'assign_post'
 
   root 'static_pages#home'
 end

@@ -1,4 +1,6 @@
 class Post < ActiveRecord::Base
+  has_paper_trail only: [:title, :body]
+
   belongs_to :user
 
   has_many :post_payments

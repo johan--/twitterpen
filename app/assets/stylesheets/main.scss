@@ -53,4 +53,10 @@ body {
       margin-top: 20px;
     }
   } // .payment-form
+
+  .single-post {
+    .affix {
+      width: 165px; // col-md-2
+    }
+  } // .single-post
 } // .posts-page

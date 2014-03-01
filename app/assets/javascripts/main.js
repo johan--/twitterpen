@@ -1,4 +1,6 @@
 $(document).ready(function() {
+  $('.timeago').timeago();
+
   if ( $('.payment-form-container').length > 0 ) {
     var url = $.url();
 

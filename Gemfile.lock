@@ -85,6 +85,9 @@ GEM
       multi_json (~> 1.3)
       omniauth-oauth (~> 1.0)
     orm_adapter (0.5.0)
+    paper_trail (3.0.0)
+      activerecord (>= 3.0, < 5.0)
+      activesupport (>= 3.0, < 5.0)
     pg (0.17.1)
     polyglot (0.3.3)
     rack (1.5.2)
@@ -102,6 +105,8 @@ GEM
       rails-assets-jquery (>= 1.9.0)
     rails-assets-components-font-awesome (4.0.3)
     rails-assets-jquery (2.1.0)
+    rails-assets-jquery-timeago (1.3.2)
+      rails-assets-jquery (>= 1.4)
     rails-assets-jquery.payment (1.0.2)
       rails-assets-jquery (>= 1.5)
     rails-assets-purl (2.3.1)
@@ -177,10 +182,12 @@ DEPENDENCIES
   jbuilder (~> 1.2)
   jquery-rails
   omniauth-twitter
+  paper_trail (~> 3.0.0)
   pg
   rails (= 4.0.2)
   rails-assets-bootstrap
   rails-assets-components-font-awesome
+  rails-assets-jquery-timeago
   rails-assets-jquery.payment
   rails-assets-purl
   rails_12factor

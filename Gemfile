@@ -17,6 +17,7 @@ gem 'slim'
 gem 'rolify'
 gem 'stripe', git: 'https://github.com/stripe/stripe-ruby'
 gem 'statesman'
+gem 'paper_trail', '~> 3.0.0'
 
 group :production do
   gem 'rails_12factor'
@@ -43,3 +44,4 @@ gem 'rails-assets-bootstrap'
 gem 'rails-assets-components-font-awesome'
 gem 'rails-assets-jquery.payment'
 gem 'rails-assets-purl'
+gem 'rails-assets-jquery-timeago'

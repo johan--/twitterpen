@@ -1,10 +1,19 @@
 .static-pages.static-pages-home
   .row
-    .col-md-6.col-md-offset-3
-      .jumbotron.text-center
-        h2 Sign up with Twitter
+    .col-md-5.col-md-offset-1
+      .panel.panel-default.text-center
+        .panel-heading
+          h3.panel-title I am a PUBLISHER
+        .panel-body.text-center
+          = link_to user_omniauth_authorize_path('twitter', role: 'publisher', origin: publisher_intro_path ), class: 'btn btn-lg btn-primary' do
+            i.fa.fa-twitter.fa-lg
+            |  Sign Up using Twitter as a Publisher
 
-        = link_to user_omniauth_authorize_path('twitter', role: 'publisher', origin: publisher_intro_path ), class: 'btn btn-lg btn-primary' do
-          i.fa.fa-twitter.fa-lg
-          |  Sign Up using Twitter
-
+    .col-md-5
+      .panel.panel-default.text-center
+        .panel-heading
+          h3.panel-title I am an EDITOR
+        .panel-body
+          = link_to user_omniauth_authorize_path('twitter', role: 'editor', origin: posts_path ), class: 'btn btn-lg btn-primary' do
+            i.fa.fa-twitter.fa-lg
+            |  Sign Up using Twitter as an Editor
