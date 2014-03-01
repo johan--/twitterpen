@@ -20,4 +20,8 @@ class Post < ActiveRecord::Base
   # Optionally delegate some methods
   delegate :can_transition_to?, :transition_to!, :transition_to, :current_state,
            to: :state_machine
+
+  def editor_name
+    User.find(self.editor_id).name if self.editor_id
+  end
 end

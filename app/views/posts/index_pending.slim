@@ -1,10 +1,10 @@
 .posts-page
-  .editor-posts
+  .pending-posts
     .row
       .col-md-12
         .page-header
           h3
-            | My Posts
+            | Pending Posts
     .row
       .col-md-12
         table.table.table-hover
@@ -12,7 +12,7 @@
             tr
               th.col-md-5 Title
               th.col-md-5
-              th.col-md-2 Started Editing At
+              th.col-md-2 Submitted
               th
           tbody
             - @posts.each do |post|
@@ -20,4 +20,4 @@
                 td = link_to truncate(post.title, length: 55, separator: ' '), post_path(post)
                 td = truncate(post.body, length: 55, separator: ' ')
                 td = timeago(post.created_at)
-                td = link_to "Edit".html_safe, post_path(post)
+                td = link_to "Read".html_safe, post_path(post)

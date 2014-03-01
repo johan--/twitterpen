@@ -33,7 +33,7 @@
                 td = timeago(post.updated_at)
 
                 - if state == 'assigned' || state == 'completed'
-                  td John Doe
+                  td = post.editor_name
                 - else
                   td.text-danger Not Assigned
 

@@ -2,16 +2,24 @@ class PostsController < ApplicationController
   before_action :set_post, only: [:edit, :update, :destroy]
 
   before_filter :authenticate_user!
+
   before_filter :set_section
+
+  # FIXME: Replace the role checks below with cancan
+  before_filter :check_editor_role, only: [:index_editor]
+  before_filter :check_publisher_role, only: [:new, :create, :destroy]
 
   def index
     if current_user.is_publisher?
       @posts = current_user.posts.ordered
       render 'index_publisher'
     else
-      @posts = Post.joins(:post_transitions).where('post_transitions.to_state = ?', 'paid').ordered
-      render 'index_editor'
+      @posts = Post.joins(:post_payments).where('post_payments.status = ? AND posts.editor_id IS NULL', $payments[:status][:paid]).ordered
+      render 'index_pending'
     end
+  end
+
+  def index_editor
   end
 
   def show
@@ -50,10 +58,6 @@ class PostsController < ApplicationController
   end
 
   def assign_post
-    unless current_user.is_editor?
-      redirect_to posts_path, alert: 'Sorry, you need to be an editor to do this.' and return
-    end
-
     post = Post.find(params[:id])
     if post.editor_id?
       redirect_to posts_path, alert: 'Sorry, this post has already been assigned.' and return
@@ -81,5 +85,17 @@ class PostsController < ApplicationController
   protected
     def set_section
       @section = 'posts'
+    end
+
+    def check_role_editor
+      unless current_user.is_editor?
+        redirect_to posts_path, alert: 'Sorry, you have to be an editor to do this.' and return
+      end
+    end
+
+    def check_role_publisher
+      unless current_user.is_publisher?
+        redirect_to posts_path, alert: 'Sorry, you have to be a publisher to do this.' and return
+      end
     end
 end
