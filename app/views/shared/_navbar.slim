@@ -28,7 +28,7 @@
               a href="#" My Settings
             li[class="#{@section == 'posts' ? 'active' : ''}"]
               = link_to 'Pending Posts', posts_path
-            li
-              = link_to 'My Posts', '#'
+            li[class="#{@section == 'assigned_posts' ? 'active' : ''}"]
+              = link_to 'Assigned Posts', assigned_posts_path
             li
               = link_to 'Sign out', destroy_user_session_path, method: :delete

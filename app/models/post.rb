@@ -11,6 +11,12 @@ class Post < ActiveRecord::Base
   scope :ordered, lambda { order('id ASC') }
   scope :recently_updated, lambda { order('updated_at DESC') }
   scope :for_user, lambda { |user| where(user_id: user.id) }
+  scope :for_editor, lambda { |editor| where(editor_id: editor.id) }
+  scope :with_transition, lambda {
+    joins(:post_transitions)
+    .where('post_transitions.sort_key = (SELECT MAX(sort_key) FROM post_transitions WHERE post_id = posts.id)')
+    .select('posts.*, post_transitions.to_state, post_transitions.metadata, post_transitions.sort_key')
+  }
 
   # Initialize the state machine
   def state_machine

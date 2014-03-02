@@ -17,5 +17,7 @@
 //= require jquery.payment/jquery.payment
 //= require purl
 //= require jquery-timeago
+//= require diff_match_patch.20121119
+//= require jquery.pretty-text-diff.min.1.0.2
 //= require helper
 //= require main

@@ -1,0 +1,48 @@
+.posts-page
+  .single-post.single-post-compare
+    .row
+      .col-md-6
+        .panel.panel-warning.original-post
+          .panel-heading
+            h3.panel-title Original
+
+          .panel-body
+            h3
+              .heading-original
+                = @post_original.title
+              small.pull-right = @post_original.created_at.strftime("%m/%d/%Y")
+            br
+            p
+              .body-original
+                == @post_original.body
+
+
+      .col-md-6
+        .panel.panel-success.diff-post
+          .panel-heading
+            h3.panel-title Visual Diff
+
+          .panel-body
+            h3
+              .heading-diff
+
+              small.pull-right = @post.updated_at.strftime("%m/%d/%Y")
+            br
+            p
+              .body-diff
+
+    .row
+      .col-md-12
+        .panel.panel-success.edited-post
+          .panel-heading
+            h3.panel-title Edited
+
+          .panel-body
+            h3
+              .heading-changed
+                = @post.title
+              small.pull-right = @post.updated_at.strftime("%m/%d/%Y")
+            br
+            p
+              .body-changed
+                == @post.body
