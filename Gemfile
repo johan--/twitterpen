@@ -30,7 +30,11 @@ end
 
 group :test, :development do
   gem 'sqlite3'
+end
+
+group :development do
   gem 'dotenv-rails'
+  gem 'hirb'
 end
 
 # Use ActiveModel has_secure_password
