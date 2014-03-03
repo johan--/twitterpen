@@ -1,0 +1,57 @@
+.posts-page
+  .publisher-posts
+    .row
+      .col-md-12
+        .page-header
+          h3
+            | My submissions
+            = link_to new_post_path, class: 'btn btn-success pull-right' do
+              i.fa.fa-plus
+              |  Submit New
+
+    .row
+      .col-md-12
+        table.table.table-hover
+          thead
+            tr
+              th.col-md-6 Title
+              th Submitted
+              th Last Edit
+              th Editor
+              th Status
+          tbody
+            - @posts.each do |post|
+              - state = post.state_machine.current_state
+
+              tr
+                - if state == 'pending' || state == 'paid'
+                  td = link_to post.title, edit_post_path(post)
+                - elsif state == 'assigned'
+                  td = link_to post.title
+                - else
+                  td = link_to post.title, compare_post_path(post)
+
+
+                td = post.created_at.strftime("%m/%d/%Y")
+                td = timeago(post.updated_at)
+
+                - if state == 'assigned' || state == 'completed'
+                  td = post.editor_name
+                - else
+                  td.text-danger Not Assigned
+
+                td.status
+                  - if state == 'pending'
+                    span.label.label-danger Pending Payment
+                  - elsif state == 'paid'
+                    span.label.label-danger Waiting
+                  - elsif state == 'assigned'
+                    span.label.label-warning In Progress
+                  - elsif state == 'completed'
+                    span.label.label-success Completed
+
+    .row
+      .col-md-12
+        = link_to new_post_path, class: 'btn btn-success pull-right' do
+          i.fa.fa-plus
+          |  Submit New

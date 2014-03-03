@@ -1,0 +1,27 @@
+= simple_form_for @post, html: { class: 'form post-form' } do |f|
+  = f.input :id, as: 'hidden', input_html: { value: @post.id }
+
+  - if @post.errors.any?
+    .alert.alert-danger
+      p
+        strong Please review the problems below:
+      ul.list-unstyled
+        - @post.errors.full_messages.each do |msg|
+          li
+            | - #{msg}
+
+  .row
+    .col-md-2
+      img.img-thumbnail src="http://placehold.it/120x120" alt="#{current_user.name}"
+    .col-md-10
+      .row
+        .col-md-12.form-group
+          = f.text_field :title, placeholder: 'Post Title', class: 'form-control'
+
+        .col-md-12.form-group
+          = f.text_area :body, placeholder: 'Post Body', rows: 12, class: 'form-control'
+
+  .row
+    .col-md-12
+      .form-actions.text-center
+        = f.button :submit, 'Submit', class: 'btn-success'

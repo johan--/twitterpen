@@ -36,7 +36,7 @@ body {
     }
   } // .post-form
 
-  .publisher-posts {
+  .publisher-posts, .pending-posts {
     td.status {
       vertical-align: middle !important;
     }
@@ -53,4 +53,20 @@ body {
       margin-top: 20px;
     }
   } // .payment-form
+  .single-post {
+    .affix {
+      width: 165px; // col-md-2
+    }
+
+    &.single-post-compare {
+      ins {
+        background-color: #c6ffc6;
+        text-decoration: none;
+      }
+
+      del {
+        background-color: #ffc6c6;
+      }
+    } // .single-post-compare
+  } // .single-post
 } // .posts-page

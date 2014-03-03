@@ -1,4 +1,6 @@
 $(document).ready(function() {
+  $('.timeago').timeago();
+
   if ( $('.payment-form-container').length > 0 ) {
     var url = $.url();
 
@@ -11,4 +13,18 @@ $(document).ready(function() {
       $('.payment-form-container .panel').highlight();
     }
   }
+
+  $('.single-post-compare').prettyTextDiff({
+    originalContainer: '.original-post .heading-original',
+    changedContainer: '.edited-post .heading-changed',
+    diffContainer: '.diff-post .heading-diff',
+    cleanup: true
+  });
+
+  $('.single-post-compare').prettyTextDiff({
+    originalContainer: '.original-post .body-original',
+    changedContainer: '.edited-post .body-changed',
+    diffContainer: '.diff-post .body-diff',
+    cleanup: true
+  });
 });

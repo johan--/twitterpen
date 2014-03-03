@@ -19,7 +19,6 @@ class PostPaymentsController < ApplicationController
         card: token,
         description: email
       )
-      logger.debug charge.inspect
     rescue Stripe::CardError => e
       logger.debug e
     end
@@ -37,8 +36,12 @@ class PostPaymentsController < ApplicationController
 
     @post_payment.merge!(stripe_err_message: charge.failure_message, stripe_err_code: charge.failure_code) if (charge.failure_code && charge.failure_message)
 
+    if @post_payment.save
+      post.state_machine.transition_to(:paid)
+    end
+
     respond_to do |format|
-      if @post_payment.save
+      if @post_payment.persisted?
         format.json { render json: @post_payment, status: :created, location: @post_payment  }
         format.html { redirect_to posts_path, notice: 'Success! Your post has been successfully submitted and an Editor will be assigned as soon as possible.' }
       else

@@ -9,11 +9,15 @@ gem 'therubyracer', platforms: :ruby
 gem 'jquery-rails'
 gem 'turbolinks'
 gem 'jbuilder', '~> 1.2'
+gem 'pg'
 gem 'devise'
 gem 'omniauth-twitter'
 gem 'simple_form'
 gem 'slim'
 gem 'rolify'
+gem 'stripe', git: 'https://github.com/stripe/stripe-ruby'
+gem 'statesman'
+gem 'paper_trail', '~> 3.0.0'
 
 group :production do
   gem 'rails_12factor'
@@ -29,7 +33,11 @@ end
 
 group :test, :development do
   gem 'sqlite3'
+end
+
+group :development do
   gem 'dotenv-rails'
+  gem 'hirb'
 end
 
 # Use ActiveModel has_secure_password
@@ -43,3 +51,4 @@ gem 'rails-assets-bootstrap'
 gem 'rails-assets-components-font-awesome'
 gem 'rails-assets-jquery.payment'
 gem 'rails-assets-purl'
+gem 'rails-assets-jquery-timeago'

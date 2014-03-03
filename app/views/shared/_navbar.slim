@@ -6,17 +6,29 @@
 
     .navbar-collapse.collapse
       ul.nav.navbar-nav
-        li
+        li[class="#{@section == 'home' ? 'active' : ''}"]
           = link_to 'Home', root_path
 
       - if user_signed_in?
-
-        ul.nav.navbar-nav.navbar-right
-          li.navbar-text
-            | Welcome #{current_user.name}
-          li
-            a href="#" My Settings
-          li
-            a href="#" My Submissions
-          li
-            = link_to 'Sign out', destroy_user_session_path, method: :delete
+        - if current_user.is_publisher?
+          ul.nav.navbar-nav.navbar-right
+            li.navbar-text
+              | Welcome #{current_user.name}
+            li
+              a href="#" My Settings
+            li[class="#{@section == 'posts' ? 'active' : ''}"]
+              = link_to 'My Submissions', posts_path
+            li
+              = link_to 'Sign out', destroy_user_session_path, method: :delete
+        - else
+          ul.nav.navbar-nav.navbar-right
+            li.navbar-text
+              | Welcome #{current_user.name}
+            li
+              a href="#" My Settings
+            li[class="#{@section == 'posts' ? 'active' : ''}"]
+              = link_to 'Pending Posts', posts_path
+            li[class="#{@section == 'assigned_posts' ? 'active' : ''}"]
+              = link_to 'Assigned Posts', assigned_posts_path
+            li
+              = link_to 'Sign out', destroy_user_session_path, method: :delete
