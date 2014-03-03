@@ -19,6 +19,7 @@ class PostPaymentsController < ApplicationController
         card: token,
         description: email
       )
+      logger.debug charge.inspect
     rescue Stripe::CardError => e
       logger.debug e
     end
@@ -31,10 +32,10 @@ class PostPaymentsController < ApplicationController
       currency: $payments[:currency],
       status: (charge.paid == true ? $payments[:status][:paid] : $payments[:status][:not_paid]),
       stripe_token: token,
-      stripe_err_message: charge.failure_message,
-      stripe_err_code: charge.failure_code,
       stripe_response: charge.to_json,
     )
+
+    @post_payment.merge!(stripe_err_message: charge.failure_message, stripe_err_code: charge.failure_code) if (charge.failure_code && charge.failure_message)
 
     respond_to do |format|
       if @post_payment.save
