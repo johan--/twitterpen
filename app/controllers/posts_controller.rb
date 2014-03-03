@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-  before_action :set_post, only: [:show, :edit, :update, :destroy, :compare]
+  before_action :set_post, only: [:edit, :update, :destroy, :compare]
 
   before_filter :authenticate_user!
 
