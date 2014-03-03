@@ -23,7 +23,9 @@ class PostPaymentsController < ApplicationController
       logger.debug e
     end
 
-    @post_payment = current_user.posts.find(post_id).post_payments.build(
+    post = current_user.posts.find(post_id)
+
+    @post_payment = post.post_payments.build(
       user_id: current_user.id,
       product_id: product[:id],
       email: email,
