@@ -37,7 +37,7 @@ class PostPaymentsController < ApplicationController
     @post_payment.merge!(stripe_err_message: charge.failure_message, stripe_err_code: charge.failure_code) if (charge.failure_code && charge.failure_message)
 
     if @post_payment.save
-      post.state_machine.transition_to(:paid)
+      @post_payment.post.state_machine.transition_to(:paid)
     end
 
     respond_to do |format|
