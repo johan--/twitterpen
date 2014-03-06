@@ -29,20 +29,18 @@
           = f.button :submit, 'Save as draft', class: 'btn-success'
 
   / post that is pending (not paid yet)
-  - if @post.persisted? && @post.state_machine.current_state == 'pending'
+  - elsif @post.persisted? && @post.state_machine.current_state == 'pending'
     .row
       .col-md-12
         .form-actions.text-center
           = f.button :submit, 'Save as draft', class: 'btn-default'
 
-  / post is already paid
-  - if @post.state_machine.current_state == 'paid'
+  / post is already paid, but still not submitted
+  - elsif @post.state_machine.current_state == 'paid'
     .row
       .col-md-12
         .form-actions.text-center
           = f.button :submit, 'Save as draft', class: 'btn-default'
-          a.btn.btn-success href='#' Submit for editing
-
-
-
-
+          = link_to post_submit_path(@post), class: 'btn btn-success', confirm: 'Are you sure you want to submit this post?' do
+            i.fa.fa-check
+            |  Submit for editing

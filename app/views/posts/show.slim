@@ -13,7 +13,7 @@
 
       .col-md-2
         div.affix data-spy="affix" data-offset-bottom="100"
-          = link_to assign_post_path(@post), class: 'btn btn-block btn-success', confirm: 'Are you sure you want to start editing that post?' do
+          = link_to post_assign_path(@post), class: 'btn btn-block btn-success', confirm: 'Are you sure you want to start editing this post?' do
             i.fa.fa-pencil-square-o
             |  Start Editing
           br

@@ -21,9 +21,6 @@ javascript:
       $("#cc-exp-month").val(exp.month);
       $("#cc-exp-year").val(exp.year);
 
-      // Set which post the payment is for
-      $form.find('#post-id').val($('.post-form #post_id').val());
-
       Stripe.card.createToken($form, stripeResponseHandler);
 
       // Prevent the form from submitting with the default action

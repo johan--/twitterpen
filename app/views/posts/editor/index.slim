@@ -22,5 +22,5 @@
                 td = ((post.metadata && post.metadata != 'null') ? timeago(Time.parse(JSON.parse(post.metadata)['created_at'])) : '')
                 td = timeago(post.updated_at)
                 td = link_to "Edit", edit_post_path(post)
-                td = link_to "Mark as complete", complete_post_path(post), confirm: 'Are you sure you want to mark this post as complete?'
+                td = link_to "Mark as complete", post_complete_path(post), confirm: 'Are you sure you want to mark this post as complete?'
 

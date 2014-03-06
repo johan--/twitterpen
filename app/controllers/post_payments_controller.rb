@@ -9,7 +9,7 @@ class PostPaymentsController < ApplicationController
 
     token = post_payment_params[:stripe_token]
     email = post_payment_params[:email]
-    post_id = post_payment_params[:post_id]
+    post_id = params[:post_id]
 
     # Create the charge on Stripe's servers - this will charge the user's card
     begin
@@ -46,13 +46,13 @@ class PostPaymentsController < ApplicationController
         format.html { redirect_to posts_path, notice: 'Success! Your post has been successfully submitted and an Editor will be assigned as soon as possible.' }
       else
         format.json { render json: @post_payment.errors, status: :unprocessable_entity }
-        format.html { redirect_to edit_post_path(post_payment_params[:post_id]), alert: 'Something went wrong with your payment. Please get send us a message at <a href="mailto:support@twitter">support@twitterpen</a>' }
+        format.html { redirect_to edit_post_path(post_id), alert: 'Something went wrong with your payment. Please get send us a message at <a href="mailto:support@twitter">support@twitterpen</a>' }
       end
     end
   end
 
   private
     def post_payment_params
-      params.require(:post_payment).permit(:stripe_token, :email, :post_id)
+      params.require(:post_payment).permit(:stripe_token, :email)
     end
 end
