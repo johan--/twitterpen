@@ -11,11 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema.define(version: 20140223182648) do
-=======
 ActiveRecord::Schema.define(version: 20140301003304) do
->>>>>>> faf9583c014c323676594fb27d8a45defd86fc68
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,8 +31,6 @@ ActiveRecord::Schema.define(version: 20140301003304) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-<<<<<<< HEAD
-=======
 
   create_table "post_transitions", force: true do |t|
     t.string  "to_state"
@@ -47,7 +41,6 @@ ActiveRecord::Schema.define(version: 20140301003304) do
 
   add_index "post_transitions", ["post_id"], name: "index_post_transitions_on_post_id", using: :btree
   add_index "post_transitions", ["sort_key", "post_id"], name: "index_post_transitions_on_sort_key_and_post_id", unique: true, using: :btree
->>>>>>> faf9583c014c323676594fb27d8a45defd86fc68
 
   create_table "posts", force: true do |t|
     t.string   "title"
@@ -100,8 +93,6 @@ ActiveRecord::Schema.define(version: 20140301003304) do
   end
 
   add_index "users_roles", ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id", using: :btree
-<<<<<<< HEAD
-=======
 
   create_table "versions", force: true do |t|
     t.string   "item_type",  null: false
@@ -113,6 +104,5 @@ ActiveRecord::Schema.define(version: 20140301003304) do
   end
 
   add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
->>>>>>> faf9583c014c323676594fb27d8a45defd86fc68
 
 end
