@@ -31,8 +31,8 @@ body {
   .post-form {
     margin-bottom: 30px;
 
-    .btn-success {
-      margin-right: 20px;
+    .btn + .btn {
+      margin-left: 20px;
     }
   } // .post-form
 

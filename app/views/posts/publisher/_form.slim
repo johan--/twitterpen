@@ -21,8 +21,28 @@
         .col-md-12.form-group
           = f.text_area :body, placeholder: 'Post Body', rows: 12, class: 'form-control'
 
-  .row
-    .col-md-12
-      .form-actions.text-center
-        = f.button :submit, 'Submit', class: 'btn-success'
-        button.btn.btn-default Save as Draft
+  / new post
+  - if @post.new_record?
+    .row
+      .col-md-12
+        .form-actions.text-center
+          = f.button :submit, 'Save as draft', class: 'btn-success'
+
+  / post that is pending (not paid yet)
+  - if @post.persisted? && @post.state_machine.current_state == 'pending'
+    .row
+      .col-md-12
+        .form-actions.text-center
+          = f.button :submit, 'Save as draft', class: 'btn-default'
+
+  / post is already paid
+  - if @post.state_machine.current_state == 'paid'
+    .row
+      .col-md-12
+        .form-actions.text-center
+          = f.button :submit, 'Save as draft', class: 'btn-default'
+          a.btn.btn-success href='#' Submit for editing
+
+
+
+

@@ -23,9 +23,6 @@ group :production do
   gem 'rails_12factor'
 end
 
-gem 'pg'
-gem 'stripe', git: 'https://github.com/stripe/stripe-ruby'
-
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
@@ -46,7 +43,7 @@ end
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
-# Rails Assets https://rails-assets.org
+# Rails Assets - https://rails-assets.org
 gem 'rails-assets-bootstrap'
 gem 'rails-assets-components-font-awesome'
 gem 'rails-assets-jquery.payment'

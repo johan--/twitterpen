@@ -12,7 +12,7 @@ class PostsController < ApplicationController
   def index
     if current_user.is_publisher?
       @posts = current_user.posts.ordered
-      render 'index_publisher'
+      render 'posts/publisher/index'
     else
       @posts = Post.joins(:post_payments).where('post_payments.status = ? AND posts.editor_id IS NULL', $payments[:status][:paid]).ordered
       render 'index_pending'
@@ -38,10 +38,10 @@ class PostsController < ApplicationController
 
   def edit
     if current_user.is_publisher?
-      render 'edit_publisher'
+      render 'posts/publisher/edit'
     else
       @section = 'assigned_posts'
-      render 'edit_editor'
+      render 'posts/editor/edit'
     end
   end
 
