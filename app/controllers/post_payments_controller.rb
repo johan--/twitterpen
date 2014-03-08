@@ -3,34 +3,57 @@ class PostPaymentsController < ApplicationController
   before_filter :authenticate_user!
 
   def create
-    product = $payments[:product][:post_edit]
+    post = Post.for_user(current_user).find(params[:post_id])
 
-    Stripe.api_key = ENV['STRIPE_API_KEY']
+    unless current_user.is_publisher? && post.present?
+      redirect_to root_path and return
+    end
+
+    product = $payments[:product][:post_edit]
 
     token = post_payment_params[:stripe_token]
     email = post_payment_params[:email]
-    post_id = params[:post_id]
+
+    # Create or retrieve Stripe customer
+    if current_user.stripe_customer_id?
+      customer = Stripe::Customer.retrieve(current_user.stripe_customer_id)
+      email = customer.email
+    else
+      customer = Stripe::Customer.create(
+        email: email,
+        card:  token,
+        description: current_user.id,
+      )
+
+      # Assign stripe customer id to the user
+      if customer.present? && customer.id?
+        current_user.stripe_customer_id = customer.id
+        current_user.save
+      end
+    end
 
     # Create the charge on Stripe's servers - this will charge the user's card
     begin
       charge = Stripe::Charge.create(
-        amount: product[:price],
-        currency: $payments[:currency],
-        card: token,
-        description: email
+        customer:     customer.id,
+        amount:       product[:price],
+        currency:     $payments[:currency],
+        description:  "Payment for POST ID #{post.id}",
       )
     rescue Stripe::CardError => e
       logger.debug e
+      redirect_to edit_post_path(post), alert: e.message and return
     end
 
-    @post_payment = current_user.posts.find(post_id).post_payments.build(
-      user_id: current_user.id,
-      product_id: product[:id],
-      email: email,
-      amount: product[:price],
-      currency: $payments[:currency],
-      status: (charge.paid == true ? $payments[:status][:paid] : $payments[:status][:not_paid]),
-      stripe_token: token,
+    # Create payment entry in our database
+    @post_payment = current_user.posts.find(post.id).post_payments.build(
+      user_id:        current_user.id,
+      product_id:     product[:id],
+      email:          email,
+      amount:         product[:price],
+      currency:       $payments[:currency],
+      status:         (charge.paid == true ? $payments[:status][:paid] : $payments[:status][:not_paid]),
+      stripe_token:   (token.present? ? token : 'cc_on_file'),
       stripe_response: charge.to_json,
     )
 
@@ -46,7 +69,7 @@ class PostPaymentsController < ApplicationController
         format.html { redirect_to posts_path, notice: 'Success! Your post has been successfully submitted and an Editor will be assigned as soon as possible.' }
       else
         format.json { render json: @post_payment.errors, status: :unprocessable_entity }
-        format.html { redirect_to edit_post_path(post_id), alert: 'Something went wrong with your payment. Please get send us a message at <a href="mailto:support@twitter">support@twitterpen</a>' }
+        format.html { redirect_to edit_post_path(post), alert: 'Something went wrong with your payment. Please send us a message at <a href="mailto:support@twitter">support@twitterpen</a>' }
       end
     end
   end
