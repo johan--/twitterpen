@@ -18,9 +18,15 @@
           tbody
             - @posts.each do |post|
               tr
-                td = link_to truncate(post.title, length: 45, separator: ' '), edit_post_path(post)
+                td = link_to truncate(post.title, length: 75, separator: ' '), edit_post_path(post)
                 td = ((post.metadata && post.metadata != 'null') ? timeago(Time.parse(JSON.parse(post.metadata)['created_at'])) : '')
                 td = timeago(post.updated_at)
-                td = link_to "Edit", edit_post_path(post)
-                td = link_to "Mark as complete", post_complete_path(post), confirm: 'Are you sure you want to mark this post as complete?'
+
+                td.action
+                  small = link_to "Edit", edit_post_path(post)
+                td.action
+                  small
+                    = link_to post_complete_path(post), data: { confirm: 'Are you sure you want to mark this post as complete?' } do
+                      i.fa.fa-check
+                      |   Mark as complete
 

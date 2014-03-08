@@ -27,6 +27,10 @@ body {
 } // .static-pages
 
 .posts-page {
+  // common stylings
+  td.action {
+    vertical-align: bottom;
+  }
 
   .post-form {
     margin-bottom: 30px;
@@ -53,6 +57,7 @@ body {
       margin-top: 20px;
     }
   } // .payment-form
+
   .single-post {
     .affix {
       width: 165px; // col-md-2

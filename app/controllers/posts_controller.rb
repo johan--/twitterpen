@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-  before_action :set_post, only: [:show, :edit, :update, :destroy, :submit, :compare, :complete]
+  before_action :set_post, only: [:show, :edit, :update, :destroy, :submit, :compare, :complete, :assign]
 
   before_filter :authenticate_user!
 
@@ -22,6 +22,8 @@ class PostsController < ApplicationController
   def index_editor
     @section = 'assigned_posts'
     @posts = Post.for_editor(current_user).with_transition.where("post_transitions.to_state != 'completed'")
+
+    render 'posts/editor/index'
   end
 
   def compare
@@ -87,7 +89,7 @@ class PostsController < ApplicationController
       @post.editor_assigned_at = Time.now
       if @post.save
         @post.state_machine.transition_to(:assigned)
-        redirect_to posts_path, notice: 'Great, you can now edit the post.' and return
+        redirect_to edit_post_path(@post), notice: 'Great, you can now edit the post.' and return
       else
         redirect_to posts and return
       end
@@ -110,7 +112,7 @@ class PostsController < ApplicationController
       if current_user.is_publisher?
         @post = Post.for_user(current_user).find(post_id)
       else
-        @post = Post.for_editor(current_user).find(post_id)
+        @post = Post.for_editor(current_user).find_by_id(post_id) || Post.where(editor_id: nil).find(post_id)
       end
     end
 
