@@ -54,7 +54,6 @@ class PostPaymentsController < ApplicationController
       charge = Stripe::Charge.create(stripe_params)
     rescue Stripe::CardError => e
       logger.debug e
-      redirect_to edit_post_path(post), alert: e.message and return
     end
 
     # Create payment entry in our database
