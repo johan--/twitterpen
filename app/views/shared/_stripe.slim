@@ -6,20 +6,20 @@ javascript:
   // Get token from Stripe
   jQuery(function($) {
     // Validation from jquery.payment
-    $('#cc-number').payment('formatCardNumber');
-    $('#cc-exp').payment('formatCardExpiry');
-    $('#cc-cvc').payment('formatCardCVC');
+    $('#card-number').payment('formatCardNumber');
+    $('#card-exp').payment('formatCardExpiry');
+    $('#card-cvc').payment('formatCardCVC');
 
-    $('#payment-form').submit(function(event) {
+    $('#stripe-payment-form').submit(function(e) {
       var $form = $(this);
 
       // Disable the submit button to prevent repeated clicks
       $form.find('button').prop('disabled', true);
 
       // Split single expiration field into month/year
-      exp = $("#cc-exp").payment("cardExpiryVal"); // => {month: "value", year: "value"}
-      $("#cc-exp-month").val(exp.month);
-      $("#cc-exp-year").val(exp.year);
+      exp = $("#card-exp").payment("cardExpiryVal"); // => {month: "value", year: "value"}
+      $("#card-exp-month").val(exp.month);
+      $("#card-exp-year").val(exp.year);
 
       Stripe.card.createToken($form, stripeResponseHandler);
 
@@ -30,12 +30,11 @@ javascript:
 
   // Pass the token to the server if everything is ok
   var stripeResponseHandler = function(status, response) {
-    var $form = $('#payment-form');
+    var $form = $('#stripe-payment-form');
 
     if (response.error) {
       // Show the errors on the form
-      $form.find('.alert-container').html($('<div class="alert alert-danger">' + response.error.message + '</div>'));
-      // $form.find('.payment-errors').text(response.error.message);
+      $('.stripe-errors').html($('<div class="alert alert-danger">' + response.error.message + '</div>'));
       $form.find('button').prop('disabled', false);
     } else {
       // Remove errors, if any
@@ -45,7 +44,7 @@ javascript:
       var token = response.id;
 
       // Insert the token into the form so it gets submitted to the server
-      $form.find('#stripe-token').val(token)
+      $form.find('#stripe-token').val(token);
 
       // and submit
       $form.get(0).submit();

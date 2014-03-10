@@ -68,5 +68,14 @@ Twitterpen::Application.routes.draw do
   get 'assigned-posts' => 'posts#index_editor', as: 'assigned_posts'
   get 'publisher/intro' => 'static_pages#publisher_intro'
 
+  namespace :users do
+    get 'settings', to: :settings
+    get 'payment-history', to: :payment_history, as: 'payment_history'
+
+    namespace :stripe do
+      resources :cards, only: [:create, :update, :destroy]
+    end
+  end
+
   root 'static_pages#home'
 end

@@ -36,4 +36,11 @@ class User < ActiveRecord::Base
       end
     end
   end
+
+  def stripe_get_default_card
+    if self.stripe_customer_id?
+      customer = Stripe::Customer.retrieve(self.stripe_customer_id)
+      (customer.default_card.present? ? customer.cards.retrieve(customer.default_card) : nil)
+    end
+  end
 end

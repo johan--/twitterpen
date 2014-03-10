@@ -6,58 +6,59 @@
         .panel-heading
           h3.panel-title Please place your payment of #{$payments[:product][:post_edit][:price_str]} for this post to be edited.
         .panel-body
-          - if current_user.stripe_customer_id?
-            / Temporary fake form
-            form.form-horizontal action="#{post_post_payments_path(@post)}" method="POST" autocomplete="off"
-              input type="hidden" name="#{request_forgery_protection_token.to_s}" value="#{form_authenticity_token}"
-              input type="hidden" name="post_payment[stripe_token]"
-              input type="hidden" name="post_payment[email]"
 
-              .form-actions.text-center
-                button.btn.btn-primary type="submit" Make Payment
-          - else
-            form.form-horizontal#payment-form action="#{post_post_payments_path(@post)}" method="POST" autocomplete="off"
-              input type="hidden" name="#{request_forgery_protection_token.to_s}" value="#{form_authenticity_token}"
-              input#stripe-token type="hidden" name="post_payment[stripe_token]"
-              input#cc-exp-month type="hidden" data-stripe="exp-month"
-              input#cc-exp-year type="hidden" data-stripe="exp-year"
+          - if current_user.stripe_customer_id? && @card.present?
+            #payment-options
+              .list-group.col-md-6.col-md-offset-3
+                a.list-group-item#pay-default-card href="#"
+                  h4.list-group-item-heading
+                    | #{@card.type} ending in #{@card.last4}
+                  p.list-group-item-text
+                    strong Expires
+                    |  #{@card.exp_month} / #{@card.exp_year}
+                    br
+                    strong Name on card
+                    |  #{@card.name}
 
-              .row
-                .col-md-11.col-md-offset-1
-                  / Comment the block below until we have proper integration of more than one payment provider
-                  / .form-group
-                  /   .col-md-4.col-md-offset-2
-                  /     label.radio-inline
-                  /       input type="radio" name="payment-method" value="cc" Credit Card
+                    form.hidden action="#{post_post_payments_path(@post)}" method="POST"
+                      input type="hidden" name="#{request_forgery_protection_token.to_s}" value="#{form_authenticity_token}"
+                      input type="hidden" name="card" value="default"
 
-                  /     label.radio-inline
-                  /       input type="radio" name="payment-method" value="paypal" PayPal
+                a.list-group-item.list-group-item-warning#pay-new-card href="javascript:void(0);" Or pay with new card
 
-                  .form-group
-                    label.control-label.col-md-2 for="cc-name" Name on Card
-                    .col-md-4
-                      input.form-control#cc-name type="text" placeholder="Name on Card" required="required" data-stripe="name"
+          form[id="stripe-payment-form" class="form-horizontal #{@card.present? ? 'hidden' : ''}" action="#{post_post_payments_path(@post)}" method="POST" autocomplete="off"]
+            input type="hidden" name="#{request_forgery_protection_token.to_s}" value="#{form_authenticity_token}"
+            input#stripe-token type="hidden" name="post_payment[stripe_token]"
+            input#card-exp-month type="hidden" data-stripe="exp-month"
+            input#card-exp-year type="hidden" data-stripe="exp-year"
 
-                    label.control-label.col-md-1 for="cc-email" Email
-                    .col-md-3
-                      input.form-control#email type="text" name="post_payment[email]" placeholder="Email" required="required"
+            .row
+              .col-md-11.col-md-offset-1
+                .form-group
+                  label.control-label.col-md-2 for="card-name" Name on Card
+                  .col-md-4
+                    input.form-control#card-name type="text" placeholder="Name on Card" required="required" data-stripe="name"
 
-                  .form-group
-                    label.control-label.col-md-2 for="cc-number" Card Details
-                    .col-md-4
-                      input.form-control#cc-number type="text" placeholder="Card number" required="required" data-stripe="number"
+                  label.control-label.col-md-1 for="card-email" Email
+                  .col-md-3
+                    input.form-control#card-email type="text" name="post_payment[email]" placeholder="Email" required="required"
 
-                    .col-md-2
-                      input.form-control#cc-exp type="text" placeholder="MM/YY" maxlength="9" required="required"
+                .form-group
+                  label.control-label.col-md-2 for="card-number" Card Details
+                  .col-md-4
+                    input.form-control#card-number type="text" placeholder="Card number" required="required" data-stripe="number"
 
-                    .col-md-2
-                      input.form-control#cc-cvc type="text" placeholder="CVC" maxlength="4" required="required" data-stripe="cvc"
+                  .col-md-2
+                    input.form-control#card-exp type="text" placeholder="MM/YY" maxlength="9" required="required"
 
-                  .form-actions.text-center
-                    button.btn.btn-primary type="submit" Make Payment
+                  .col-md-2
+                    input.form-control#card-cvc type="text" placeholder="CVC" maxlength="4" required="required" data-stripe="cvc"
 
-              .row
-                .col-md-12
-                  .alert-container
+                .form-actions.text-center
+                  button.btn.btn-primary type="submit" Make Payment
+
+            .row
+              .col-md-12
+                .stripe-errors.alert-container
 
 = render 'shared/stripe'
