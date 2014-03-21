@@ -13,13 +13,13 @@ $(document).ready(function() {
       $('.payment-form-container .panel').highlight();
     }
 
-    $('#pay-default-card').click( function() {
+    $('.pay-cc-on-file').click( function() {
       $(this).find('form').submit();
     });
 
     $('#pay-new-card').click( function() {
       $('#payment-options').addClass('hidden');
-      $('#payment-form').removeClass('hidden');
+      $('#stripe-payment-form').removeClass('hidden');
     });
   }
 

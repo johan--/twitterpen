@@ -41,8 +41,8 @@ class PostsController < ApplicationController
   def edit
     if current_user.is_publisher?
 
-      # Get payment info if available
-      @card = current_user.stripe_get_default_card
+      # Get cards on file
+      @cards = current_user.user_cards
 
       render 'posts/publisher/edit'
     else

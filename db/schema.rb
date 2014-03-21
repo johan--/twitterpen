@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140308094843) do
+ActiveRecord::Schema.define(version: 20140316154408) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(version: 20140308094843) do
     t.text     "stripe_response"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "card_id"
   end
 
   create_table "post_transitions", force: true do |t|
@@ -65,6 +66,25 @@ ActiveRecord::Schema.define(version: 20140308094843) do
 
   add_index "roles", ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id", using: :btree
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
+
+  create_table "user_cards", force: true do |t|
+    t.integer  "user_id"
+    t.string   "stripe_card_id"
+    t.string   "stripe_fingerprint"
+    t.string   "stripe_token"
+    t.string   "last4"
+    t.string   "card_type"
+    t.integer  "exp_month"
+    t.integer  "exp_year"
+    t.string   "name"
+    t.boolean  "is_default"
+    t.boolean  "is_active"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "user_cards", ["user_id", "is_active"], name: "index_user_cards_on_user_id_and_is_active", using: :btree
+  add_index "user_cards", ["user_id", "stripe_fingerprint"], name: "index_user_cards_on_user_id_and_stripe_fingerprint", unique: true, using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false

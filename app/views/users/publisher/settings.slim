@@ -60,12 +60,12 @@
                   .card-actions.pull-right
                     a.btn.btn-default.btn-xs Edit
                     | &nbsp;
-                    = link_to 'Delete', users_stripe_card_path(@card.id), method: :delete, class: 'btn btn-default btn-xs'
+                    = link_to 'Delete', '#', class: 'btn btn-default btn-xs'
 
                 .list-group
                   .list-group-item
                     h4.list-group-item-heading
-                      | #{@card.type} ending in #{@card.last4}
+                      | #{@card.card_type} ending in #{@card.last4}
                     p.list-group-item-text
                       strong Expires
                       |  #{@card.exp_month} / #{@card.exp_year}
@@ -73,44 +73,45 @@
                       strong Name on card
                       |  #{@card.name}
           - else
-            p.text-danger You do not have any cards on file
-            a.btn.btn-sm.btn-primary.show-new-card-form href="javascript:void(0);"
-              i.fa.fa-plus
-              |  Add new card
+            / p.text-danger You do not have any cards on file
+            / a.btn.btn-sm.btn-primary.show-new-card-form href="javascript:void(0);"
+            /   i.fa.fa-plus
+            /   |  Add new card
 
-            .row
-              .col-md-4
-                form.form-horizontal.form-card.form-card-new.hidden#stripe-payment-form action="#{users_stripe_cards_path}" method="POST" autocomplete="off"
-                  input type="hidden" name="#{request_forgery_protection_token.to_s}" value="#{form_authenticity_token}"
-                  input#stripe-token type="hidden" name="card[stripe_token]"
-                  input#card-exp-month type="hidden" data-stripe="exp-month"
-                  input#card-exp-year type="hidden" data-stripe="exp-year"
+            / .row
+            /   .col-md-4
+            /     form.form-horizontal.form-card.form-card-new.hidden#stripe-payment-form action="#{users_stripe_cards_path}" method="POST" autocomplete="off"
+            /       input type="hidden" name="#{request_forgery_protection_token.to_s}" value="#{form_authenticity_token}"
+            /       input#stripe-token type="hidden" name="card[stripe_token]"
+            /       input#stripe-card-fingerprint type="hidden" name="post_payment[stripe_card_fingerprint]"
+            /       input#card-exp-month type="hidden" data-stripe="exp-month"
+            /       input#card-exp-year type="hidden" data-stripe="exp-year"
 
-                  .form-group
-                    label.control-label.col-md-4 for="card-email" Email
-                    .col-md-8
-                      input.form-control#card-email type="email" name="card[email]" required="required"
+            /       .form-group
+            /         label.control-label.col-md-4 for="card-email" Email
+            /         .col-md-8
+            /           input.form-control#card-email type="email" name="card[email]" required="required"
 
-                  .form-group
-                    label.control-label.col-md-4 for="card-name" Name on Card
-                    .col-md-8
-                      input.form-control#card-name type="text" required="required" data-stripe="name"
+            /       .form-group
+            /         label.control-label.col-md-4 for="card-name" Name on Card
+            /         .col-md-8
+            /           input.form-control#card-name type="text" required="required" data-stripe="name"
 
-                  .form-group
-                    label.control-label.col-md-4 for="card-number" Card Details
-                    .col-md-8
-                      input.form-control#card-number type="text" placeholder="Card number" required="required" data-stripe="number"
+            /       .form-group
+            /         label.control-label.col-md-4 for="card-number" Card Details
+            /         .col-md-8
+            /           input.form-control#card-number type="text" placeholder="Card number" required="required" data-stripe="number"
 
-                  .form-group
-                    label.control-label.col-md-4 for="card-exp" &nbsp;
-                    .col-md-4
-                      input.form-control#card-exp type="text" placeholder="MM/YY" required="required"
-                    .col-md-4
-                      input.form-control#card-cvc type="text" placeholder="CVC" maxlength="4" required="required" data-stripe="cvc"
+            /       .form-group
+            /         label.control-label.col-md-4 for="card-exp" &nbsp;
+            /         .col-md-4
+            /           input.form-control#card-exp type="text" placeholder="MM/YY" required="required"
+            /         .col-md-4
+            /           input.form-control#card-cvc type="text" placeholder="CVC" maxlength="4" required="required" data-stripe="cvc"
 
-                  button.btn.btn-sm.btn-success.pull-right type="submit"
-                    i.fa.fa-plus
-                    |  Add new card
+            /       button.btn.btn-sm.btn-success.pull-right type="submit"
+            /         i.fa.fa-plus
+            /         |  Add new card
 
             .row
               .col-md-12

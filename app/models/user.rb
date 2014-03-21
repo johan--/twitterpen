@@ -8,6 +8,7 @@ class User < ActiveRecord::Base
          :omniauthable, omniauth_providers: [:twitter]
 
   has_many :posts
+  has_many :user_cards
   has_many :post_payments
 
   ##instance methods
@@ -39,8 +40,27 @@ class User < ActiveRecord::Base
 
   def stripe_get_default_card
     if self.stripe_customer_id?
-      customer = Stripe::Customer.retrieve(self.stripe_customer_id)
-      (customer.default_card.present? ? customer.cards.retrieve(customer.default_card) : nil)
+      customer = self.stripe_customer
+      customer.default_card
     end
+  end
+
+  def stripe_customer(token = nil, email = nil)
+    if self.stripe_customer_id?
+      customer = Stripe::Customer.retrieve(self.stripe_customer_id)
+    else
+      customer = Stripe::Customer.create(
+        email: email,
+        card: token,
+        description: self.id,
+      )
+
+      if customer.present?
+        self.stripe_customer_id = customer.id
+        self.save
+      end
+    end
+
+    customer
   end
 end

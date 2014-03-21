@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   def settings
     @section = 'settings'
     @edited_articles = Post.with_transition.where("post_transitions.to_state = 'completed'").count
-    @card = current_user.stripe_get_default_card
+    @card = current_user.user_cards.find_by_is_default(true)
 
     render 'users/publisher/settings'
   end

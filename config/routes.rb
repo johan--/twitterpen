@@ -71,10 +71,6 @@ Twitterpen::Application.routes.draw do
   namespace :users do
     get 'settings', to: :settings
     get 'payment-history', to: :payment_history, as: 'payment_history'
-
-    namespace :stripe do
-      resources :cards, only: [:create, :update, :destroy]
-    end
   end
 
   root 'static_pages#home'

@@ -40,11 +40,12 @@ javascript:
       // Remove errors, if any
       $form.find('.alert-container').html('');
 
-      // token contains id, last4, and card type
-      var token = response.id;
-
-      // Insert the token into the form so it gets submitted to the server
-      $form.find('#stripe-token').val(token);
+      // Insert the token and cc info into the form so it gets submitted to the server
+      $form.find('#stripe-token').val(response.id);
+      $form.find('#stripe-card-id').val(response.card.id);
+      $form.find('#stripe-card-fingerprint').val(response.card.fingerprint);
+      $form.find('#card-last4').val(response.card.last4);
+      $form.find('#card-type').val(response.card.type);
 
       // and submit
       $form.get(0).submit();

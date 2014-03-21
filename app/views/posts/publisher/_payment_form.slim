@@ -7,37 +7,42 @@
           h3.panel-title Please place your payment of #{$payments[:product][:post_edit][:price_str]} for this post to be edited.
         .panel-body
 
-          - if current_user.stripe_customer_id? && @card.present?
+          - if current_user.stripe_customer_id? && @cards.present?
             #payment-options
               .list-group.col-md-6.col-md-offset-3
-                a.list-group-item#pay-default-card href="#"
-                  h4.list-group-item-heading
-                    | #{@card.type} ending in #{@card.last4}
-                  p.list-group-item-text
-                    strong Expires
-                    |  #{@card.exp_month} / #{@card.exp_year}
-                    br
-                    strong Name on card
-                    |  #{@card.name}
+                - for card in @cards do
+                  a.list-group-item.pay-cc-on-file href="#"
+                    h4.list-group-item-heading
+                      | #{card.card_type} ending in #{card.last4}
+                    p.list-group-item-text
+                      strong Expires
+                      |  #{card.exp_month} / #{card.exp_year}
+                      br
+                      strong Name on card
+                      |  #{card.name}
 
-                    form.hidden action="#{post_post_payments_path(@post)}" method="POST"
-                      input type="hidden" name="#{request_forgery_protection_token.to_s}" value="#{form_authenticity_token}"
-                      input type="hidden" name="card" value="default"
+                      form.hidden action="#{post_post_payments_path(@post)}" method="POST"
+                        input type="hidden" name="#{request_forgery_protection_token.to_s}" value="#{form_authenticity_token}"
+                        input type="hidden" name="stripe_card_id" value="#{card.stripe_card_id}"
 
                 a.list-group-item.list-group-item-warning#pay-new-card href="javascript:void(0);" Or pay with new card
 
-          form[id="stripe-payment-form" class="form-horizontal #{@card.present? ? 'hidden' : ''}" action="#{post_post_payments_path(@post)}" method="POST" autocomplete="off"]
+          form[id="stripe-payment-form" class="form-horizontal #{@cards.present? ? 'hidden' : ''}" action="#{post_post_payments_path(@post)}" method="POST" autocomplete="off"]
             input type="hidden" name="#{request_forgery_protection_token.to_s}" value="#{form_authenticity_token}"
-            input#stripe-token type="hidden" name="post_payment[stripe_token]"
-            input#card-exp-month type="hidden" data-stripe="exp-month"
-            input#card-exp-year type="hidden" data-stripe="exp-year"
+            input#stripe-card-id type="hidden" name="card[stripe_card_id]"
+            input#stripe-card-fingerprint type="hidden" name="card[stripe_fingerprint]"
+            input#stripe-token type="hidden" name="card[stripe_token]"
+            input#card-exp-month type="hidden" name="card[exp_month]" data-stripe="exp-month"
+            input#card-exp-year type="hidden" name="card[exp_year]" data-stripe="exp-year"
+            input#card-last4 type="hidden" name="card[last4]"
+            input#card-type type="hidden" name="card[card_type]"
 
             .row
               .col-md-11.col-md-offset-1
                 .form-group
                   label.control-label.col-md-2 for="card-name" Name on Card
                   .col-md-4
-                    input.form-control#card-name type="text" placeholder="Name on Card" required="required" data-stripe="name"
+                    input.form-control#card-name type="text" name="card[name]" placeholder="Name on Card" required="required" data-stripe="name"
 
                   label.control-label.col-md-1 for="card-email" Email
                   .col-md-3
@@ -54,11 +59,16 @@
                   .col-md-2
                     input.form-control#card-cvc type="text" placeholder="CVC" maxlength="4" required="required" data-stripe="cvc"
 
-                .form-actions.text-center
-                  button.btn.btn-primary type="submit" Make Payment
+                .form-group
+                  .col-md-3
+                    .checkbox
+                      label
+                        input type="checkbox" name="post_payment[save_card]" checked="checked" value="true" Save card details
+                  .col-md-3
+                    button.btn.btn-primary.pull-right type="submit" Make Payment
 
-            .row
-              .col-md-12
-                .stripe-errors.alert-container
+          .row
+            .col-md-12
+              .stripe-errors.alert-container
 
 = render 'shared/stripe'
