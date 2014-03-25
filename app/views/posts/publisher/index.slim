@@ -26,10 +26,10 @@
               tr
                 - if state == 'pending' || state == 'paid'
                   td = link_to post.title, edit_post_path(post)
-                - elsif state == 'assigned'
-                  td = link_to post.title
+                - elsif state == 'submitted' || state == 'assigned'
+                  td = link_to post.title, '#'
                 - else
-                  td = link_to post.title, compare_post_path(post)
+                  td = link_to post.title, post_compare_path(post)
 
 
                 td = post.created_at.strftime("%m/%d/%Y")
@@ -41,10 +41,10 @@
                   td.text-danger Not Assigned
 
                 td.status
-                  - if state == 'pending'
-                    span.label.label-danger Pending Payment
-                  - elsif state == 'paid'
-                    span.label.label-danger Waiting
+                  - if state == 'pending' || state == 'paid'
+                    span.label.label-default Draft
+                  - elsif state == 'submitted'
+                    span.label.label-warning Submitted
                   - elsif state == 'assigned'
                     span.label.label-warning In Progress
                   - elsif state == 'completed'

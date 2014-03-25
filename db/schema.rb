@@ -11,11 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema.define(version: 20140223182648) do
-=======
-ActiveRecord::Schema.define(version: 20140301003304) do
->>>>>>> faf9583c014c323676594fb27d8a45defd86fc68
+ActiveRecord::Schema.define(version: 20140316154408) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,9 +30,8 @@ ActiveRecord::Schema.define(version: 20140301003304) do
     t.text     "stripe_response"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "card_id"
   end
-<<<<<<< HEAD
-=======
 
   create_table "post_transitions", force: true do |t|
     t.string  "to_state"
@@ -47,7 +42,6 @@ ActiveRecord::Schema.define(version: 20140301003304) do
 
   add_index "post_transitions", ["post_id"], name: "index_post_transitions_on_post_id", using: :btree
   add_index "post_transitions", ["sort_key", "post_id"], name: "index_post_transitions_on_sort_key_and_post_id", unique: true, using: :btree
->>>>>>> faf9583c014c323676594fb27d8a45defd86fc68
 
   create_table "posts", force: true do |t|
     t.string   "title"
@@ -73,6 +67,25 @@ ActiveRecord::Schema.define(version: 20140301003304) do
   add_index "roles", ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id", using: :btree
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
 
+  create_table "user_cards", force: true do |t|
+    t.integer  "user_id"
+    t.string   "stripe_card_id"
+    t.string   "stripe_fingerprint"
+    t.string   "stripe_token"
+    t.string   "last4"
+    t.string   "card_type"
+    t.integer  "exp_month"
+    t.integer  "exp_year"
+    t.string   "name"
+    t.boolean  "is_default"
+    t.boolean  "is_active"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "user_cards", ["user_id", "is_active"], name: "index_user_cards_on_user_id_and_is_active", using: :btree
+  add_index "user_cards", ["user_id", "stripe_fingerprint"], name: "index_user_cards_on_user_id_and_stripe_fingerprint", unique: true, using: :btree
+
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
@@ -89,6 +102,7 @@ ActiveRecord::Schema.define(version: 20140301003304) do
     t.string   "provider"
     t.string   "uid"
     t.string   "name"
+    t.string   "stripe_customer_id"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
@@ -100,8 +114,6 @@ ActiveRecord::Schema.define(version: 20140301003304) do
   end
 
   add_index "users_roles", ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id", using: :btree
-<<<<<<< HEAD
-=======
 
   create_table "versions", force: true do |t|
     t.string   "item_type",  null: false
@@ -113,6 +125,5 @@ ActiveRecord::Schema.define(version: 20140301003304) do
   end
 
   add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
->>>>>>> faf9583c014c323676594fb27d8a45defd86fc68
 
 end

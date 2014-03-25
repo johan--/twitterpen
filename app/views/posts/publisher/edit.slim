@@ -5,7 +5,7 @@
         .page-header
           h3 #{@post.title}
 
-        = render 'form_publisher'
+        = render 'posts/publisher/form'
 
     .row
       .col-md-10.col-md-offset-1
@@ -15,4 +15,4 @@
           |  When submitted you will be charged #{$payments[:product][:post_proofread][:price_str]} for proofreading this post.
 
     - if @post.state_machine.allowed_transitions.include?('paid')
-      = render 'posts/partials/payment_form'
+      = render 'posts/publisher/payment_form'

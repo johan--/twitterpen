@@ -12,7 +12,23 @@ $(document).ready(function() {
       // Flash it to get the user's attention
       $('.payment-form-container .panel').highlight();
     }
+
+    $('.pay-cc-on-file').click( function() {
+      $(this).find('form').submit();
+    });
+
+    $('#pay-new-card').click( function() {
+      $('#payment-options').addClass('hidden');
+      $('#stripe-payment-form').removeClass('hidden');
+    });
   }
+
+  $('.settings-publisher .show-new-card-form').click(function() {
+    $(this).addClass('hidden');
+    $('.settings-publisher .form-card-new').removeClass('hidden');
+  });
+
+  $('.settings-publisher .account-overview .panel').equalHeight();
 
   $('.single-post-compare').prettyTextDiff({
     originalContainer: '.original-post .heading-original',

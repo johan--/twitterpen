@@ -56,14 +56,22 @@ Twitterpen::Application.routes.draw do
   #     resources :products
   #   end
 
-  resources :posts
-  resources :post_payments, only: [:create]
+  resources :posts do
+    get 'submit',   to: :submit
+    get 'assign',   to: :assign
+    get 'complete', to: :complete
+    get 'compare',  to: :compare
 
-  get 'publisher/intro' => 'static_pages#publisher_intro'
-  get 'posts/:id/assign' => 'posts#assign', as: 'assign_post'
+    resources :post_payments, only: :create
+  end
+
   get 'assigned-posts' => 'posts#index_editor', as: 'assigned_posts'
-  get 'posts/:id/complete' => 'posts#complete', as: 'complete_post'
-  get 'posts/:id/compare' => 'posts#compare', as: 'compare_post'
+  get 'publisher/intro' => 'static_pages#publisher_intro'
+
+  namespace :users do
+    get 'settings', to: :settings
+    get 'payment-history', to: :payment_history, as: 'payment_history'
+  end
 
   root 'static_pages#home'
 end
