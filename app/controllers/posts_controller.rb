@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-  before_action :set_post, only: [:edit, :update, :destroy, :compare]
+  before_action :set_post, only: [:show, :edit, :update, :destroy, :submit, :compare, :complete, :assign]
 
   before_filter :authenticate_user!
 
@@ -7,25 +7,27 @@ class PostsController < ApplicationController
 
   # FIXME: Replace the role checks below with cancan
   before_filter :check_role_editor, only: [:index_editor, :complete]
-  before_filter :check_role_publisher, only: [:new, :create, :destroy, :compare]
+  before_filter :check_role_publisher, only: [:new, :create, :destroy, :submit, :compare]
 
   def index
     if current_user.is_publisher?
       @posts = current_user.posts.ordered
-      render 'index_publisher'
+      render 'posts/publisher/index'
     else
-      @posts = Post.joins(:post_payments).where('post_payments.status = ? AND posts.editor_id IS NULL', $payments[:status][:paid]).ordered
+      @posts = Post.with_transition.where("post_transitions.to_state = 'submitted'").ordered
       render 'index_pending'
     end
   end
 
   def index_editor
     @section = 'assigned_posts'
-    @posts = Post.for_editor(current_user).with_transition.where("to_state != 'completed'")
+    @posts = Post.for_editor(current_user).with_transition.where("post_transitions.to_state != 'completed'")
+
+    render 'posts/editor/index'
   end
 
   def compare
-    @post_original = @post.versions.where(event: :update).first.reify
+    @post_original = @post.versions.where(event: 'update').first.reify
   end
 
   def show
@@ -38,10 +40,14 @@ class PostsController < ApplicationController
 
   def edit
     if current_user.is_publisher?
-      render 'edit_publisher'
+
+      # Get cards on file
+      @cards = current_user.user_cards
+
+      render 'posts/publisher/edit'
     else
       @section = 'assigned_posts'
-      render 'edit_editor'
+      render 'posts/editor/edit'
     end
   end
 
@@ -73,16 +79,21 @@ class PostsController < ApplicationController
     redirect_to posts_path
   end
 
+  def submit
+    @post.state_machine.transition_to(:submitted)
+
+    redirect_to posts_path
+  end
+
   def assign
-    post = Post.find(params[:id])
-    if post.editor_id?
+    if @post.editor_id?
       redirect_to posts_path, alert: 'Sorry, this post has already been assigned.' and return
     else
-      post.editor_id = current_user.id
-      post.editor_assigned_at = Time.now
-      if post.save
-        post.state_machine.transition_to(:assigned)
-        redirect_to posts_path, notice: 'Great, you can now edit the post.' and return
+      @post.editor_id = current_user.id
+      @post.editor_assigned_at = Time.now
+      if @post.save
+        @post.state_machine.transition_to(:assigned)
+        redirect_to edit_post_path(@post), notice: 'Great, you can now edit the post.' and return
       else
         redirect_to posts and return
       end
@@ -90,9 +101,8 @@ class PostsController < ApplicationController
   end
 
   def complete
-    post = Post.find(params[:id])
-    if post.editor_id == current_user.id
-      post.transition_to(:completed)
+    if @post
+      @post.transition_to(:completed)
       redirect_to assigned_posts_path, notice: 'Great! Your post have been submitted back to the publisher'
     else
       redirect_to assigned_posts_path, alert: 'Sorry, you are not the editor of this post.'
@@ -101,10 +111,12 @@ class PostsController < ApplicationController
 
   private
     def set_post
+      post_id = (params[:post_id] ? params[:post_id] : params[:id])
+
       if current_user.is_publisher?
-        @post = Post.for_user(current_user).find(params[:id])
+        @post = Post.for_user(current_user).find(post_id)
       else
-        @post = Post.for_editor(current_user).find(params[:id])
+        @post = Post.for_editor(current_user).find_by_id(post_id) || Post.where(editor_id: nil).find(post_id)
       end
     end
 

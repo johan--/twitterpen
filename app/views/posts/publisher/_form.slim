@@ -1,0 +1,46 @@
+= simple_form_for @post, html: { class: 'form post-form' } do |f|
+  = f.input :id, as: 'hidden', input_html: { value: @post.id }
+
+  - if @post.errors.any?
+    .alert.alert-danger
+      p
+        strong Please review the problems below:
+      ul.list-unstyled
+        - @post.errors.full_messages.each do |msg|
+          li
+            | - #{msg}
+
+  .row
+    .col-md-2
+      img.img-thumbnail src="http://placehold.it/120x120" alt="#{current_user.name}"
+    .col-md-10
+      .row
+        .col-md-12.form-group
+          = f.text_field :title, placeholder: 'Post Title', class: 'form-control'
+
+        .col-md-12.form-group
+          = f.text_area :body, placeholder: 'Post Body', rows: 12, class: 'form-control'
+
+  / new post
+  - if @post.new_record?
+    .row
+      .col-md-12
+        .form-actions.text-center
+          = f.button :submit, 'Save as draft', class: 'btn-success'
+
+  / post that is pending (not paid yet)
+  - elsif @post.persisted? && @post.state_machine.current_state == 'pending'
+    .row
+      .col-md-12
+        .form-actions.text-center
+          = f.button :submit, 'Save as draft', class: 'btn-default'
+
+  / post is already paid, but still not submitted
+  - elsif @post.state_machine.current_state == 'paid'
+    .row
+      .col-md-12
+        .form-actions.text-center
+          = f.button :submit, 'Save as draft', class: 'btn-default'
+          = link_to post_submit_path(@post), class: 'btn btn-success', confirm: 'Are you sure you want to submit this post?' do
+            i.fa.fa-check
+            |  Submit for editing

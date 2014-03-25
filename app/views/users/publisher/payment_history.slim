@@ -1,0 +1,29 @@
+.users-page
+  .settings.payment-history
+
+    / Payment History
+    .row
+      .col-md-12
+        .page-header
+          h4 Payment History
+
+    .row
+      .col-md-12
+        table.table.table-hover
+          thead
+            tr
+              th Date
+              th Transaction ID
+              th Type
+              th Amount
+              th Result
+          tbody
+            - @post_payments.each do |payment|
+              tr[class="#{(payment.status == $payments[:status][:not_paid] ? 'danger' : '')}"]
+                td = payment.created_at.strftime("%m/%d/%Y")
+                td = payment.id
+                td Credit Card
+                / FIXME: Use javascript to format money
+                td $29
+                td = (payment.status == $payments[:status][:paid] ? 'Paid' : 'Failed')
+
